@@ -33,7 +33,15 @@ func (t chat) String() string {
 	return fmt.Sprintf("Telegram: %s (%s)", t.name, t.chatID)
 }
 
+func (t chat) SendAsync(message any) {
+	go t.Send(message)
+}
+
 func (t chat) Send(message any) error {
+	return t.send(message)	
+}
+
+func (t chat) send(message any) error {
 	// if message is a string, just send it
 	msgStr, ok := message.(string)
 	if !ok {
@@ -110,4 +118,3 @@ func splitMessageIntoChunks(message string, chunkSize int) []string {
 	}
 	return chunks
 }
-
