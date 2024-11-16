@@ -7,41 +7,33 @@ import (
 	"net/http"
 )
 
-type chat struct {
+type Chat struct {
 	name   string
 	chatID string
 	apiKey string
 }
 
-func Chat(name string, id string, apiKey string) chat {
-	return chat{name: name, chatID: id, apiKey: apiKey}
+func NewChat(name string, id string, apiKey string) Chat {
+	return Chat{name: name, chatID: id, apiKey: apiKey}
 }
 
-func (t chat) GetChatId() string {
+func (t Chat) GetID() string {
 	return t.chatID
 }
 
-func (t chat) GetApiKey() string {
+func (t Chat) GetApiKey() string {
 	return t.apiKey
 }
 
-func (t chat) GetChatName() string {
+func (t Chat) GetName() string {
 	return t.name
 }
 
-func (t chat) String() string {
+func (t Chat) String() string {
 	return fmt.Sprintf("Telegram: %s (%s)", t.name, t.chatID)
 }
 
-func (t chat) SendAsync(message any) {
-	go t.Send(message)
-}
-
-func (t chat) Send(message any) error {
-	return t.send(message)	
-}
-
-func (t chat) send(message any) error {
+func (t Chat) Send(message any) error {
 	// if message is a string, just send it
 	msgStr, ok := message.(string)
 	if !ok {
@@ -76,7 +68,7 @@ func (t chat) send(message any) error {
 	return nil
 }
 
-func (t chat) sendChunk(message string) error {
+func (t Chat) sendChunk(message string) error {
 	body := map[string]string{
 		"chat_id":                  t.chatID,
 		"text":                     message,
